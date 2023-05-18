@@ -1,6 +1,8 @@
 import React, { useState,useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Register = () => {
 
   const [email, setEmail] = useState("");
@@ -25,10 +27,29 @@ useEffect(() => {
     
     // when user not fill data then show alert
     if (email === "" || pass === "" || cpass==="" || name === "" ) {
-        alert("plz fill form data")
+      toast.error('Plz Fill The Form Data', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
       }
       else if(pass !== cpass){
-        alert("password and conform password not match plz enter same pasword")
+        // alert("password and conform password not match plz enter same pasword")
+        toast.error('password and conform password not match plz enter same pasword', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          });
       }
      
       
@@ -42,15 +63,35 @@ useEffect(() => {
         }).then(async(response) => {
          const resData= await response.json()
           if(response.status === 201){
-            alert(resData.msg);
+            // alert(resData.msg);
+            toast.success(resData.msg, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              });
             
             navigate('/login')
            
             localStorage.setItem("login", JSON.stringify(item))
           }
             
-          if(response.status === 409){
-            alert(resData.msg)
+          if(response.status === 409 || response.status === 400){
+            // alert(resData.msg)
+            toast.error(resData.msg, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              });
           }
           
         }).catch(error => {
@@ -100,6 +141,7 @@ useEffect(() => {
         </div>
       </div>
     </div>
+    <ToastContainer/>
     </>
   )
 }

@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import Header from './Header';
 import { NavLink } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Add = () => {
   const [name, setName] = useState("")
   const [p_id, setPId] = useState("")
@@ -28,7 +30,17 @@ const Add = () => {
     const item = { name, p_id, image, price, description }
 
     if (name === "" || p_id === "" || image === "" || price === "" || description === "") {
-      alert("plz fill the product details")
+      // alert("plz fill the product details")
+      toast.error('Plz Fill The Product Details', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
     }
     else {
       fetch('/products', {
@@ -51,10 +63,31 @@ const Add = () => {
         }
 
         if (response.status === 409) {
-          alert(rsponsdata.msg)
+          // alert(rsponsdata.msg)
+          toast.error(rsponsdata.msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+          
         }
         if (response.status === 400) {
-          alert(rsponsdata.msg)
+          // alert(rsponsdata.msg)
+          toast.error(rsponsdata.msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
         }
 
       }).catch((error) => {
@@ -109,7 +142,7 @@ const Add = () => {
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
-                       
+                       Add Product
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
@@ -133,6 +166,7 @@ const Add = () => {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </>
   )
 }

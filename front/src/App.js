@@ -8,6 +8,7 @@ import Update from './components/Update';
 import Add from './components/Add';
 import Home from './components/Home';
 import Protected from './components/Protected';
+import ForgetPass from './components/ForgetPass';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
     <BrowserRouter>
     <Routes>
     <Route path='/' element={<Protected Cmp={Home}/>}></Route>
+    <Route path='/forget' element={<ForgetPass/>}></Route>
+   
 
       <Route path='/register' element={<Register/>}></Route>
       <Route path='/login' element={<Login/>}></Route>

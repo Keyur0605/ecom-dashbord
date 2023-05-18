@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Header = () => {
   
   const navigate = useNavigate()
@@ -19,7 +20,17 @@ const Header = () => {
     
       const responseData = await response.json();
 
-      alert(responseData.msg)
+      // alert(responseData.msg)
+      toast.success(responseData.msg, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
     })
     localStorage.clear()
     navigate('/register')
@@ -62,6 +73,7 @@ const Header = () => {
 
         </div>
       </nav>
+      <ToastContainer/>
     </div>
   )
 }

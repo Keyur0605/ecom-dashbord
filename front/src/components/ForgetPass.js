@@ -1,0 +1,213 @@
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const ForgetPass = () => {
+    const [email, setEmail] = useState("")
+    const [disable, setDisable] = useState(false)
+    const [two, setTwo] = useState(false)
+    const [otp, setOtp] = useState("")
+    const [newpass, setNewPass] = useState("")
+    const [cnewpass, setCNewPass] = useState("")
+const navigate= useNavigate()
+    const send = (e) => {
+        e.preventDefault()
+        let item = { email }
+
+        if (email === "") {
+            toast.error('Plz Enter Register Email Address ', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        }
+        else {
+            fetch('/forgetpassword', {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                body: JSON.stringify(item)
+            }).then((response) => {
+                // console.log(response,"response",response.status);
+                if (response.status === 200) {
+                    toast.success('OTP send ', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                    setDisable(true)
+
+
+
+                }
+                else if (response.status === 204) {
+                    toast.error('E-mail Does Not Exist ', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+    }
+
+
+    const otpsCheck = (e) => {
+        e.preventDefault()
+        if (otp === "") {
+            toast.error('Please Enter OTP ', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        }
+        else {
+            const item = { otp }
+            fetch(`/forgetpassword/${email}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                body: JSON.stringify(item)
+            }).then((responce) => {
+                if (responce.status === 200) {
+                    toast.success('OTP match ', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                    setTwo(true)
+                }
+                else if (responce.status === 204 || responce.status === 400) {
+                    toast.error(' OTP Not Match', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+    }
+
+
+    const setPassword=(e)=>{
+        e.preventDefault()
+        if(newpass === "" || cnewpass === ""){
+            toast.error('Please Enter Form Details', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        }
+
+        else{
+            const item = {newpass,cnewpass}
+            fetch(`/forgetpassword/reset/${email}`,{
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                body: JSON.stringify(item)
+            }).then((responce)=>{
+                if(responce.status === 201){
+                    navigate('/login')
+                } 
+                else if(responce.status === 204){
+                    toast.error('Password Not Match', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    }); 
+                }
+            })
+                
+        }
+    }
+    return (
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col-7 mx-auto">
+                  { two?"":
+                    <form>
+                        <div className="mb-3">
+                            <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+                            <input type="email" className="form-control" name="email" disabled={disable} placeholder='Enter Your Register Email Address' value={email} onChange={(e) => setEmail(e.target.value)} />
+                        </div>
+
+                        {disable ? "" : <button type="submit" onClick={send} className="btn btn-primary mb-4">Send OTP</button>}
+                    </form>}
+                   
+                   {two?"": <form>
+                        <div className="mb-3">
+
+                            <label htmlFor="exampleInputEmail1" className="form-label">OTP</label>
+                            <input type="text" className="form-control" placeholder='Enter Your OTP' name='otp' value={otp} onChange={(e) => setOtp(e.target.value)} />
+                        </div>
+
+                        <button type="submit" onClick={otpsCheck} className="btn btn-primary mb-5"> OTP Verify</button>
+                    </form>}
+
+                    <form>
+                        <div className="mb-3">
+                            <label htmlFor="exampleInputEmail1" className="form-label">Set New Password</label>
+                            <input type="password" className="form-control mb-4" name="newpass" placeholder='Enter Your New Password' value={newpass} onChange={(e) => setNewPass(e.target.value)} />
+                            <input type="password" className="form-control" name="cnewpass" placeholder='Enter Your New Confirm  Password' value={cnewpass} onChange={(e) => setCNewPass(e.target.value)} />
+                        </div>
+
+                        <button type="submit" onClick={setPassword} className="btn btn-primary">send</button>
+                    </form>
+
+
+                </div>
+            </div>
+            <ToastContainer />
+        </div>
+    )
+}
+
+export default ForgetPass

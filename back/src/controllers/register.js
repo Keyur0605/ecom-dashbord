@@ -24,7 +24,7 @@ const registerAdmin = async (req, res) => {
             res.status(201).json({"msg": "User created."});
         }
     } catch (err) {
-        res.status(400).json({"msg": "Bad request."});
+        res.status(400).json({"msg": "E-mail is not Valid."});
     }
 }
 

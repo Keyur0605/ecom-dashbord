@@ -8,7 +8,7 @@ const addProduct = async (req, res) => {
         const data = await Product.find({ p_id });
 
         if (data.length > 0) {
-            res.status(409).json({ "msg": "Product already exists." });
+            res.status(409).json({ "msg": "Product Id already exists." });
         } else {
             const productData = Product({
                 name,

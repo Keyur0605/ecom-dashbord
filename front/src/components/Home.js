@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Header from './Header'
 import ProductCard from './ProductCard'
 import { Dna } from "react-loader-spinner"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Home = () => {
     const [data, setData] = useState([])
     const [loader, setLoader] = useState(true)
@@ -21,7 +23,16 @@ const Home = () => {
             method: "DELETE"
         })
         //  getData()
-
+        toast.success('Product Deleted', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
         const update=data.filter((current)=>{
             return current.p_id !== p_id
         })
@@ -74,6 +85,7 @@ const Home = () => {
 
                 </div>
             </div>
+            <ToastContainer/>
         </div>
     )
 }

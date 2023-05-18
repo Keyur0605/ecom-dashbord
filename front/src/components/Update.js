@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate, useParams } from 'react-router-dom'
-import { Dna } from 'react-loader-spinner'
+import { Dna } from 'react-loader-spinner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Update = () => {
     const [image, setImage] = useState("")
     const [name, setName] = useState("")
@@ -49,13 +51,31 @@ const Update = () => {
         }).then(async (response) => {
           
         if(response.status === 204){
-           
+            // toast.success('Product Updated', {
+            //     position: "top-right",
+            //     autoClose: 3000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "colored",
+            //     });
                 navigate("/")
 
         }
 
         else if(response.status === 400){
-            alert("Bad request")
+            toast.error('Bad request', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                });
         }
         }).catch((error) => {
             console.log(error);
@@ -147,7 +167,9 @@ const Update = () => {
                         </div>
                     </>
             }
+             <ToastContainer/>
         </div>
+       
     )
 }
 
