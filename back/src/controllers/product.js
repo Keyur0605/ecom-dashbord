@@ -5,7 +5,7 @@ const addProduct = async (req, res) => {
     try {
         const { name, p_id, image, price, description } = req.body;
 
-        const data = await Product.find({ p_id });
+        const data = await Product.find({$and: [{p_id}, {u_id: req.user._id}]});
 
         if (data.length > 0) {
             res.status(409).json({ "msg": "Product Id already exists." });
@@ -15,7 +15,8 @@ const addProduct = async (req, res) => {
                 p_id,
                 image,
                 price,
-                description
+                description,
+                u_id: req.user._id
             })
 
             await productData.save();
@@ -28,7 +29,7 @@ const addProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
     try {
-        const data = await Product.find();
+        const data = await Product.find({u_id: req.user._id});
 
         if (data.length > 0) {
             res.status(201).json(data);
@@ -42,7 +43,7 @@ const getProducts = async (req, res) => {
 
 const getProduct = async (req, res) => {
     try {
-        const data = await Product.find({ p_id: req.params.pid });
+        const data = await Product.find({$and: [{p_id: req.params.pid}, {u_id: req.user._id}]});
 
         if (data.length > 0) {
             res.status(201).json(data);
@@ -56,8 +57,7 @@ const getProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        // const { name, image, price, description } = req.body;
-        await Product.findOneAndUpdate({ p_id: req.params.pid }, req.body);
+        await Product.findOneAndUpdate({$and: [{p_id: req.params.pid}, {u_id: req.user._id}]}, req.body);
         res.status(204).json({ "msg": "Product data updated." });
     } catch (err) {
         res.status(400).json({ "msg": "Bad request." });;
@@ -66,8 +66,7 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        const p_id = req.params.pid;
-        await Product.findOneAndDelete({ p_id });
+        await Product.findOneAndDelete({$and: [{p_id: req.params.pid}, {u_id: req.user._id}]});
         res.status(204).json({ "msg": "Product deleted." });
     } catch (err) {
         res.status(400).json({ "msg": "Bad request." });

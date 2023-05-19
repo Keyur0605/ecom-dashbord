@@ -21,6 +21,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    u_id: {
+        type: String,
+        required: true,
+    }
 })
 
 const Product = new mongoose.model("Product", productSchema);
