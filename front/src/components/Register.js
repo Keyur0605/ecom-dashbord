@@ -22,7 +22,7 @@ useEffect(() => {
 // Add data to the database
   const addData = (e) => {
     e.preventDefault()
-    let item = {  name,email,pass,cpass}
+    let item = {  name,email,pass}
  
     
     // when user not fill data then show alert
@@ -64,20 +64,9 @@ useEffect(() => {
          const resData= await response.json()
           if(response.status === 201){
             // alert(resData.msg);
-            toast.success(resData.msg, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              });
-            
-            navigate('/login')
            
-            localStorage.setItem("login", JSON.stringify(item))
+            navigate('/login')
+        
           }
             
           if(response.status === 409 || response.status === 400){

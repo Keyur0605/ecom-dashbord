@@ -1,12 +1,13 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 const Header = () => {
   
   const navigate = useNavigate()
 
-
+ const jwt=localStorage.getItem('jwt')
+//  console.log(jwt ,"jwt token");
   const logout =  (e) => {
     e.preventDefault()
 
@@ -16,24 +17,29 @@ const Header = () => {
         "Content-Type": "application/json",
       },
 
-    }).then(async(response)=>{
+    }).then((response)=>{
     
-      const responseData = await response.json();
-
-      // alert(responseData.msg)
-      toast.success(responseData.msg, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });
+      
     })
     localStorage.clear()
     navigate('/register')
+  }
+
+
+  const deleteAccount=()=>{
+    fetch('/deleteacc',{
+      method:"DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    }).then((responce)=>{
+      
+      localStorage.clear()
+      navigate("/register")
+    }).catch((error)=>{
+      console.log(error);
+      
+    })
   }
   return (
     <div>
@@ -67,13 +73,14 @@ const Header = () => {
           {
             localStorage.getItem("jwt") ? <div className="dropdown me-5 pe-5">
               <button onClick={logout} className='btn btn-primary'>Logout</button>
+              <button className='btn btn-danger mx-3' onClick={deleteAccount}>Delete Account</button>
             </div> : null
           }
 
 
         </div>
       </nav>
-      <ToastContainer/>
+     
     </div>
   )
 }

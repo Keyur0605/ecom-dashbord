@@ -83,12 +83,12 @@ const resetPass = async (req, res) => {
             
             newpass = await bcrypt.hash(newpass, 10);
             cnewpass = await bcrypt.hash(cnewpass, 10);
-console.log(newpass,"gdtt");
+
             let data = {pass: newpass, cpass: cnewpass};
-            console.log(data,"msg");
+           
             
             await Register.updateOne({email}, {$set:data}, {new:true});
-            // await Register.updateOne({email}, {$set:{otp:"", token: ""}}, {new:true});
+             await Register.updateOne({email}, {$set:{otp:"", token: ""}}, {new:true});
             const a = await Register.find({email});
             console.log(a,"dghjyku");
             res.status(201).json({"msg": "Password reset successfully."});

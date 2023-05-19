@@ -3,7 +3,7 @@ const Register = require("../models/register");
 
 const registerAdmin = async (req, res) => {
     try {
-        const {name, email, pass, cpass} = req.body;
+        const {name, email, pass} = req.body;
     
         const data = await Register.find({email});
     
@@ -13,8 +13,7 @@ const registerAdmin = async (req, res) => {
             const user = Register({
                 name,
                 email,
-                pass, 
-                cpass
+                pass
             })
     
             const token = await user.generateToken();

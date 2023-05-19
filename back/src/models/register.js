@@ -20,10 +20,6 @@ const registerSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    cpass: {
-        type: String,
-        required: true,
-    },
     token: {
         type: String,
         required: true,
@@ -38,9 +34,9 @@ const registerSchema = new mongoose.Schema({
 registerSchema.methods.generateToken = async function(){
     try {
         const token = jwt.sign({_id:this._id.toString()}, process.env.SECRET_KEY);
-        this.token = token;
+        this.token = token + this._id;
         await this.save();
-        return token;
+        return this.token;
     } catch (err) {
         res.send(err);
     }
@@ -49,7 +45,6 @@ registerSchema.methods.generateToken = async function(){
 registerSchema.pre("save", async function(next){
     if(this.isModified("pass")){
         this.pass = await bcrypt.hash(this.pass, 10);
-        this.cpass = await bcrypt.hash(this.cpass, 10);
     }
     next();
 })
